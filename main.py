@@ -18,7 +18,7 @@ PF_UNO = platforms.Uno
 PF_XBOX = platforms.XBOX
 
 def clear():
-    sleep(1)
+    sleep(0.4) #400 ms
     # for windows
     if name == 'nt':
         _ = system('cls')
@@ -67,7 +67,7 @@ match selectedPlatformNo:
 # profile = api.Warzone.fullData(platforms.Battlenet, "LordKeldrin#1771") # returns data of type dict
 profile = api.Warzone.fullData(platforms.Battlenet, queryGamerTag)
 playerOnPlatform = queryGamerTag + ' on '+selectedPlatform.name
-if(len(profile) > 0):
+if 'status' in profile and profile["status"] != "error":
     print('Data found for '+ playerOnPlatform)
     print('Would you like to: \n1. Print results \n2. Save to file')
     printOrFile = input().strip()
@@ -83,7 +83,9 @@ if(len(profile) > 0):
         print(json.dumps(profile, indent=4))
 else:
     print('No data found for '+playerOnPlatform)
-
+    if 'data' in profile and 'message' in profile['data']:
+        print('\terror message: '+profile['data']['message'])
+   
 # weaponInfo = profile["data"]["lifetime"]["itemData"]
 
 # print(api.Warzone2.__doc__) # Prints the help info for getting warzone2 data.  See https://github.com/TodoLodo/cod-python-api#warzone2
