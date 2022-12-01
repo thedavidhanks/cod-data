@@ -1,4 +1,6 @@
 import json
+from os import system, name
+from time import sleep
 from cod_api import API, platforms
 from dotenv import dotenv_values
 
@@ -15,13 +17,27 @@ PF_STEAM = platforms.Steam
 PF_UNO = platforms.Uno
 PF_XBOX = platforms.XBOX
 
+def clear():
+    sleep(1)
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+ 
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
 # initiating the API class & login in with sso TOKEN
 api = API()
 api.login(SSO_TOKEN)
 
+## START User Input
+clear()
+
 # Request Gametag
 print('What gamer would you like to review? (enter for default)')
 usersGamerTag = input()
+clear()
 
 queryGamerTag = DEFAULT_GAMER_TAG if usersGamerTag == '' else usersGamerTag
 
@@ -29,6 +45,7 @@ queryGamerTag = DEFAULT_GAMER_TAG if usersGamerTag == '' else usersGamerTag
 print('What platform is the gamer on? ')
 print(' 1. Activision \n 2. Battlenet \n 3. Playstation \n 4. Steam \n 5. Uno \n 6. Xbox')
 selectedPlatformNo = input().strip()
+clear()
 selectedPlatformNo = selectedPlatformNo[0]
 match selectedPlatformNo:
     case '1':
@@ -54,12 +71,14 @@ if(len(profile) > 0):
     print('Data found for '+ playerOnPlatform)
     print('Would you like to: \n1. Print results \n2. Save to file')
     printOrFile = input().strip()
+    clear()
     printOrFileNum = printOrFile[0]
     if printOrFile == '2':
         filePrefix = input('Specify a filename: ')
         fileName = filePrefix+'.json' if len(filePrefix) > 0 else 'result.json'
         with open(fileName, 'w') as fp:
             json.dump(profile, fp, indent=4)
+        print('data written to '+fileName)
     else:
         print(json.dumps(profile, indent=4))
 else:
